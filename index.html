@@ -5,12 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BNI Chapter Vulkaneifel – Handwerkerabend Anmeldung</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
   :root {
     --bni-rot: #CF2030;
     --bni-rot-dark: #A8192A;
-    --bni-rot-light: #E8344A;
     --granite-grey: #64666A;
     --sterling-grey: #C8C8C8;
     --sterling-light: #F2F2F2;
@@ -21,10 +18,25 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background: var(--sterling-light);
     color: var(--power-black);
     min-height: 100vh;
+  }
+
+  /* ── LOGO BAR ── */
+  .logo-bar {
+    background: var(--true-white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .bni-logo-img {
+    height: 64px;
+    width: auto;
+    display: block;
   }
 
   /* ── HEADER ── */
@@ -32,18 +44,18 @@
     background: linear-gradient(135deg, var(--bni-rot) 0%, var(--bni-rot-dark) 100%);
     color: var(--true-white);
     text-align: center;
-    padding: 2.5rem 1.5rem 2rem;
+    padding: 2.5rem 1.5rem 2.5rem;
     position: relative;
     overflow: hidden;
   }
   .header::before {
     content: '';
     position: absolute;
-    top: -60%;
-    right: -20%;
-    width: 500px;
-    height: 500px;
-    background: rgba(255,255,255,0.06);
+    top: -50%;
+    right: -15%;
+    width: 480px;
+    height: 480px;
+    background: rgba(255,255,255,0.05);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -52,49 +64,43 @@
     position: absolute;
     bottom: -40%;
     left: -10%;
-    width: 350px;
-    height: 350px;
+    width: 320px;
+    height: 320px;
     background: rgba(255,255,255,0.04);
     border-radius: 50%;
     pointer-events: none;
   }
 
-  .bni-logo {
-    width: 120px;
-    margin-bottom: 1.2rem;
-    position: relative;
-    z-index: 1;
-  }
-
   .header h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 1.15;
+    letter-spacing: 3px;
+    line-height: 1.1;
     position: relative;
     z-index: 1;
   }
   .header h1 span {
     display: block;
-    font-size: 2.4rem;
+    font-size: 2.6rem;
   }
 
   .header-sub {
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     font-size: 0.95rem;
     font-weight: 500;
-    opacity: 0.92;
+    opacity: 0.9;
     position: relative;
     z-index: 1;
+    letter-spacing: 0.5px;
   }
 
   .event-info {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1.4rem;
+    gap: 1rem;
+    margin-top: 1.5rem;
     position: relative;
     z-index: 1;
   }
@@ -103,40 +109,98 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    font-weight: 600;
-    background: rgba(255,255,255,0.15);
+    font-weight: 700;
+    background: rgba(255,255,255,0.18);
     padding: 0.5rem 1rem;
     border-radius: 50px;
-    backdrop-filter: blur(4px);
+    letter-spacing: 0.3px;
   }
   .event-info-item svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     flex-shrink: 0;
+  }
+
+  /* ── FLYER SECTION ── */
+  .flyer-section {
+    background: var(--power-black);
+    padding: 2rem 1.5rem;
+  }
+  .flyer-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .flyer-img {
+    width: calc(50% - 0.625rem);
+    max-width: 340px;
+    min-width: 220px;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    display: block;
+  }
+  @media (max-width: 520px) {
+    .flyer-img { width: 100%; max-width: 320px; }
   }
 
   /* ── MAIN ── */
   .main {
     max-width: 560px;
-    margin: -1.5rem auto 2rem;
+    margin: 2rem auto 2rem;
     padding: 0 1rem;
-    position: relative;
-    z-index: 2;
   }
 
   .card {
     background: var(--true-white);
-    border-radius: 16px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
     padding: 2rem;
   }
 
   .card-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--power-black);
     margin-bottom: 1.5rem;
     text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── PROGRAM ── */
+  .program { display: flex; flex-direction: column; gap: 1rem; }
+  .program-item {
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+  }
+  .program-tag {
+    flex-shrink: 0;
+    background: var(--bni-rot);
+    color: var(--true-white);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 0.65rem;
+    border-radius: 50px;
+    margin-top: 0.15rem;
+  }
+  .program-content p {
+    font-size: 0.88rem;
+    color: var(--granite-grey);
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  .program-company {
+    font-size: 0.85rem;
+    color: var(--granite-grey);
+    font-weight: 400;
   }
 
   /* ── FORM ── */
@@ -154,22 +218,23 @@
   }
   .form-group label {
     display: block;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     color: var(--granite-grey);
     margin-bottom: 0.35rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
   }
   .form-group input {
     width: 100%;
     padding: 0.7rem 0.9rem;
-    border: 2px solid #E0E0E0;
-    border-radius: 10px;
+    border: 2px solid var(--sterling-grey);
+    border-radius: 8px;
     font-size: 0.95rem;
     font-family: inherit;
     transition: border-color 0.2s, box-shadow 0.2s;
     background: var(--sterling-light);
+    color: var(--power-black);
   }
   .form-group input:focus {
     outline: none;
@@ -191,19 +256,19 @@
 
   .btn {
     width: 100%;
-    padding: 0.85rem;
+    padding: 0.9rem;
     background: var(--bni-rot);
     color: var(--true-white);
     border: none;
-    border-radius: 10px;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
     margin-top: 0.5rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
   }
   .btn:hover { background: var(--bni-rot-dark); }
   .btn:active { transform: scale(0.98); }
@@ -213,38 +278,7 @@
     font-size: 0.75rem;
     color: var(--granite-grey);
     margin-top: 1rem;
-    line-height: 1.4;
-  }
-
-  /* ── PROGRAM ── */
-  .program { display: flex; flex-direction: column; gap: 1rem; }
-  .program-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-  .program-tag {
-    flex-shrink: 0;
-    background: var(--bni-rot);
-    color: var(--true-white);
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 0.3rem 0.65rem;
-    border-radius: 50px;
-    margin-top: 0.1rem;
-  }
-  .program-content p {
-    font-size: 0.88rem;
-    color: var(--granite-grey);
-    margin-top: 0.2rem;
-    font-style: italic;
-  }
-  .program-company {
-    font-size: 0.85rem;
-    color: var(--granite-grey);
-    font-weight: 400;
+    line-height: 1.5;
   }
 
   /* ── MODAL ── */
@@ -252,27 +286,26 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.55);
     z-index: 100;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    backdrop-filter: blur(4px);
   }
   .modal-overlay.active { display: flex; }
 
   .modal {
     background: var(--true-white);
-    border-radius: 20px;
+    border-radius: 12px;
     padding: 2.5rem 2rem;
-    max-width: 420px;
+    max-width: 400px;
     width: 100%;
     text-align: center;
     position: relative;
     animation: modalIn 0.3s ease;
   }
   @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    from { opacity: 0; transform: scale(0.92) translateY(16px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
   }
 
@@ -286,28 +319,23 @@
     justify-content: center;
     margin: 0 auto 1.2rem;
   }
-  .modal-check svg {
-    width: 32px;
-    height: 32px;
-    color: #2E7D32;
-  }
+  .modal-check svg { width: 32px; height: 32px; color: #2E7D32; }
 
   .modal h2 {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: var(--power-black);
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
   .modal p {
     color: var(--granite-grey);
     font-size: 0.9rem;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 1.5rem;
   }
-  .modal .btn {
-    max-width: 200px;
-    margin: 0 auto;
-  }
+  .modal .btn { max-width: 200px; margin: 0 auto; }
 
   /* ── FOOTER ── */
   .footer {
@@ -315,12 +343,11 @@
     padding: 1.5rem 1rem;
     font-size: 0.8rem;
     color: var(--granite-grey);
+    border-top: 1px solid var(--sterling-grey);
+    background: var(--true-white);
+    margin-top: 1rem;
   }
-  .footer a {
-    color: var(--bni-rot);
-    text-decoration: none;
-    font-weight: 600;
-  }
+  .footer a { color: var(--bni-rot); text-decoration: none; font-weight: 700; }
 
   /* ══════════════════════════════════════ */
   /* ── ADMIN VIEW ── */
@@ -342,37 +369,32 @@
   .admin-header h2 {
     font-size: 1.3rem;
     font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .admin-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
+  .admin-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
 
   .btn-secondary {
     padding: 0.55rem 1.2rem;
     background: var(--true-white);
     color: var(--bni-rot);
     border: 2px solid var(--bni-rot);
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 700;
     font-family: inherit;
     cursor: pointer;
     transition: background 0.2s, color 0.2s;
   }
-  .btn-secondary:hover {
-    background: var(--bni-rot);
-    color: var(--true-white);
-  }
+  .btn-secondary:hover { background: var(--bni-rot); color: var(--true-white); }
 
   .btn-small {
     padding: 0.55rem 1.2rem;
     background: var(--bni-rot);
     color: var(--true-white);
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 0.85rem;
     font-weight: 700;
     font-family: inherit;
@@ -389,20 +411,16 @@
   }
   .stat-card {
     background: var(--true-white);
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 1.2rem;
     text-align: center;
     box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   }
-  .stat-card .stat-num {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--bni-rot);
-  }
+  .stat-card .stat-num { font-size: 2rem; font-weight: 900; color: var(--bni-rot); }
   .stat-card .stat-label {
     font-size: 0.78rem;
     color: var(--granite-grey);
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-top: 0.2rem;
@@ -410,51 +428,29 @@
 
   .table-card {
     background: var(--true-white);
-    border-radius: 16px;
+    border-radius: 12px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.08);
     overflow: hidden;
   }
+  .table-wrap { overflow-x: auto; }
 
-  .table-wrap {
-    overflow-x: auto;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  thead {
-    background: var(--bni-rot);
-    color: var(--true-white);
-  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead { background: var(--bni-rot); color: var(--true-white); }
   th {
     padding: 0.85rem 1rem;
     text-align: left;
     font-weight: 700;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.6px;
     white-space: nowrap;
   }
-  td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--sterling-light);
-  }
+  td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--sterling-light); }
   tbody tr:hover { background: #FFF5F5; }
   tbody tr:last-child td { border-bottom: none; }
 
-  .empty-state {
-    padding: 3rem 1rem;
-    text-align: center;
-    color: var(--granite-grey);
-  }
-  .empty-state svg {
-    width: 48px;
-    height: 48px;
-    color: var(--sterling-grey);
-    margin-bottom: 0.75rem;
-  }
+  .empty-state { padding: 3rem 1rem; text-align: center; color: var(--granite-grey); }
+  .empty-state svg { width: 48px; height: 48px; color: var(--sterling-grey); margin-bottom: 0.75rem; }
 
   .admin-badge {
     display: inline-block;
@@ -479,33 +475,29 @@
     border-radius: 6px;
     transition: color 0.2s, background 0.2s;
   }
-  .delete-btn:hover {
-    color: var(--bni-rot);
-    background: #FFF0F0;
-  }
+  .delete-btn:hover { color: var(--bni-rot); background: #FFF0F0; }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
-    .header h1 { font-size: 1.5rem; }
-    .header h1 span { font-size: 1.8rem; }
-    .event-info { flex-direction: column; align-items: center; gap: 0.75rem; }
+    .header h1 { font-size: 1.6rem; }
+    .header h1 span { font-size: 2rem; }
+    .event-info { flex-direction: column; align-items: center; gap: 0.6rem; }
     .card { padding: 1.5rem; }
     .admin-header { flex-direction: column; align-items: flex-start; }
     th, td { padding: 0.6rem 0.75rem; font-size: 0.8rem; }
+    .bni-logo-img { height: 52px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ══════════════ LOGO BAR ══════════════ -->
+<div class="logo-bar">
+  <img src="images/bni-logo-weiss.jpg" alt="Unternehmer bei BNI®" class="bni-logo-img">
+</div>
+
 <!-- ══════════════ HEADER ══════════════ -->
 <header class="header">
-  <!-- BNI Logo as inline SVG -->
-  <svg class="bni-logo" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="200" height="80" rx="8" fill="rgba(255,255,255,0.15)"/>
-    <text x="100" y="60" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="58" fill="white" letter-spacing="4">BNI</text>
-    <text x="185" y="64" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="13" fill="white" opacity="0.7">®</text>
-  </svg>
-
   <h1>Handwerker<span>Abend</span></h1>
   <p class="header-sub">BNI Chapter Vulkaneifel · Networking für Handwerker</p>
 
@@ -525,8 +517,17 @@
   </div>
 </header>
 
+<!-- ══════════════ FLYER SECTION ══════════════ -->
+<section class="flyer-section">
+  <div class="flyer-wrap">
+    <img src="images/flyer-dark.png" alt="BNI Handwerkerabend Flyer" class="flyer-img">
+    <img src="images/flyer-clean.png" alt="BNI Handwerkerabend Flyer" class="flyer-img">
+  </div>
+</section>
+
 <!-- ══════════════ REGISTRATION VIEW ══════════════ -->
 <main class="main" id="registrationView">
+
   <div class="card" style="margin-bottom:1.5rem;">
     <h2 class="card-title">Ablauf des Abends</h2>
     <div class="program">
@@ -638,8 +639,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="adminTable">
-          </tbody>
+          <tbody id="adminTable"></tbody>
         </table>
       </div>
       <div class="empty-state" id="emptyState">
@@ -664,6 +664,7 @@
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="footer">
+  <img src="images/bni-logo-weiss.jpg" alt="Unternehmer bei BNI®" style="height:40px;width:auto;margin-bottom:0.75rem;display:block;margin-left:auto;margin-right:auto;"><br>
   Wer gibt, gewinnt!® · <a href="https://www.bni.de" target="_blank">www.bni.de</a><br>
   BNI Chapter Vulkaneifel
 </footer>
@@ -672,16 +673,8 @@
 (function() {
   'use strict';
 
-  // ── DATA STORE (in-memory array, persists via hidden textarea trick) ──
-  // Since no localStorage/sessionStorage, we keep data in memory.
-  // For persistence across page reloads in a real scenario,
-  // registrations can be exported as CSV.
   let registrations = [];
 
-  // Try to load from the embedded data element (survives within same page lifecycle)
-  const dataEl = document.getElementById('dataStore');
-
-  // ── ROUTING ──
   const params = new URLSearchParams(window.location.search);
   const isAdmin = params.get('admin') === 'true';
 
@@ -691,7 +684,6 @@
     renderAdmin();
   }
 
-  // ── FORM HANDLING ──
   const form = document.getElementById('regForm');
   form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -743,7 +735,6 @@
     document.querySelectorAll('input').forEach(i => i.classList.remove('error'));
   }
 
-  // ── MODAL ──
   function showModal() {
     document.getElementById('successModal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -753,12 +744,10 @@
     document.body.style.overflow = '';
   };
 
-  // Close modal on overlay click
   document.getElementById('successModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
-  // ── ADMIN ──
   function renderAdmin() {
     const tbody = document.getElementById('adminTable');
     const empty = document.getElementById('emptyState');
@@ -812,7 +801,6 @@
     renderAdmin();
   };
 
-  // ── CSV EXPORT ──
   window.exportCSV = function() {
     if (registrations.length === 0) {
       alert('Keine Anmeldungen zum Exportieren vorhanden.');
@@ -848,19 +836,6 @@
     }
     return str;
   }
-
-  // ── DEMO DATA FOR ADMIN PREVIEW ──
-  // If admin view is opened and no registrations exist,
-  // you can uncomment this block to show sample data:
-  /*
-  if (isAdmin && registrations.length === 0) {
-    registrations = [
-      { id: 1, vorname: 'Max', nachname: 'Mustermann', email: 'max@example.de', handy: '0171 1234567', firma: 'Mustermann Bau GmbH', datum: '22.04.2026, 10:30:00' },
-      { id: 2, vorname: 'Sabine', nachname: 'Beispiel', email: 'sabine@example.de', handy: '0172 9876543', firma: 'Elektro Beispiel', datum: '22.04.2026, 11:15:00' },
-    ];
-    renderAdmin();
-  }
-  */
 
 })();
 </script>
