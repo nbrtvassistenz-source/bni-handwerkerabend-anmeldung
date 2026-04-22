@@ -198,7 +198,9 @@
     text-transform: uppercase;
     letter-spacing: 0.6px;
   }
-  .form-group input {
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group input[type="tel"] {
     width: 100%;
     padding: 0.7rem 0.9rem;
     border: 2px solid var(--sterling-grey);
@@ -209,7 +211,9 @@
     background: var(--sterling-light);
     color: var(--power-black);
   }
-  .form-group input:focus {
+  .form-group input[type="text"]:focus,
+  .form-group input[type="email"]:focus,
+  .form-group input[type="tel"]:focus {
     outline: none;
     border-color: var(--bni-rot);
     box-shadow: 0 0 0 3px rgba(207, 32, 48, 0.12);
@@ -226,6 +230,34 @@
     display: none;
   }
   .form-group.has-error .error-msg { display: block; }
+
+  /* ── DSGVO CHECKBOX ── */
+  .checkbox-label {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--granite-grey);
+    line-height: 1.55;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: var(--bni-rot);
+    cursor: pointer;
+  }
+  .checkbox-label a {
+    color: var(--bni-rot);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+  #fg-dsgvo.has-error .checkbox-label { color: var(--bni-rot); }
 
   .btn {
     width: 100%;
@@ -245,14 +277,7 @@
   }
   .btn:hover { background: var(--bni-rot-dark); }
   .btn:active { transform: scale(0.98); }
-
-  .privacy-note {
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--granite-grey);
-    margin-top: 1rem;
-    line-height: 1.5;
-  }
+  .btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
 
   /* ── MODAL ── */
   .modal-overlay {
@@ -309,6 +334,22 @@
     margin-bottom: 1.5rem;
   }
   .modal .btn { max-width: 200px; margin: 0 auto; }
+
+  /* ── DATENSCHUTZ MODAL ── */
+  .dsgvo-modal {
+    max-width: 520px;
+    text-align: left;
+    overflow-y: auto;
+    max-height: 88vh;
+  }
+  .dsgvo-modal h2 { text-align: center; margin-bottom: 1.2rem; }
+  .dsgvo-section {
+    margin-top: 0.9rem;
+    font-size: 0.87rem;
+    color: #333;
+    line-height: 1.65;
+  }
+  .dsgvo-section strong { color: var(--power-black); }
 
   /* ── FOOTER ── */
   .footer {
@@ -555,10 +596,16 @@
         <div class="error-msg">Bitte Firma angeben</div>
       </div>
 
-      <button type="submit" class="btn">Verbindlich anmelden</button>
-    </form>
+      <div class="form-group" id="fg-dsgvo">
+        <label class="checkbox-label">
+          <input type="checkbox" id="dsgvo" required>
+          <span>Ich stimme der <a href="#" onclick="openDsgvo(event)">Datenschutzerklärung</a> zu und bin damit einverstanden, dass meine angegebenen Daten für die Veranstaltungsorganisation gespeichert werden. *</span>
+        </label>
+        <div class="error-msg">Bitte stimme der Datenschutzerklärung zu</div>
+      </div>
 
-    <p class="privacy-note">Mit der Anmeldung erklärst du dich einverstanden, dass deine Daten für die Veranstaltungsorganisation gespeichert werden.</p>
+      <button type="submit" class="btn" id="submitBtn">Verbindlich anmelden</button>
+    </form>
   </div>
 
 </main>
@@ -569,6 +616,10 @@
     <div class="admin-header">
       <h2>Anmeldungen <span class="admin-badge">Admin</span></h2>
       <div class="admin-actions">
+        <button class="btn-secondary" onclick="loadAdmin()">
+          <svg style="width:16px;height:16px;vertical-align:-3px;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+          Aktualisieren
+        </button>
         <button class="btn-secondary" onclick="exportCSV()">
           <svg style="width:16px;height:16px;vertical-align:-3px;margin-right:4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           CSV Export
@@ -580,11 +631,11 @@
 
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-num" id="adminCount">0</div>
+        <div class="stat-num" id="adminCount">–</div>
         <div class="stat-label">Anmeldungen</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num" id="adminFirmen">0</div>
+        <div class="stat-num" id="adminFirmen">–</div>
         <div class="stat-label">Firmen</div>
       </div>
     </div>
@@ -607,7 +658,7 @@
           <tbody id="adminTable"></tbody>
         </table>
       </div>
-      <div class="empty-state" id="emptyState">
+      <div class="empty-state" id="emptyState" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         <p>Noch keine Anmeldungen vorhanden.</p>
       </div>
@@ -627,6 +678,38 @@
   </div>
 </div>
 
+<!-- ══════════════ DATENSCHUTZ MODAL ══════════════ -->
+<div class="modal-overlay" id="dsgvoModal">
+  <div class="modal dsgvo-modal">
+    <h2>Datenschutzerklärung</h2>
+    <div class="dsgvo-section">
+      <strong>Verantwortlicher</strong><br>
+      BNI Chapter Vulkaneifel
+    </div>
+    <div class="dsgvo-section">
+      <strong>Erhobene Daten</strong><br>
+      Vorname, Nachname, E-Mail-Adresse, Handynummer, Firma
+    </div>
+    <div class="dsgvo-section">
+      <strong>Zweck der Verarbeitung</strong><br>
+      Organisation und Durchführung des Handwerkerabends am 28. April 2026 (Anmeldungsverwaltung, Teilnehmerplanung)
+    </div>
+    <div class="dsgvo-section">
+      <strong>Rechtsgrundlage</strong><br>
+      Art. 6 Abs. 1 lit. a DSGVO – Einwilligung der betroffenen Person
+    </div>
+    <div class="dsgvo-section">
+      <strong>Speicherdauer</strong><br>
+      Deine Daten werden spätestens 30 Tage nach der Veranstaltung (28. April 2026) gelöscht.
+    </div>
+    <div class="dsgvo-section">
+      <strong>Deine Rechte</strong><br>
+      Du hast das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung sowie auf Widerruf dieser Einwilligung. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Verarbeitung bleibt unberührt. Wende dich für Anfragen an das BNI Chapter Vulkaneifel.
+    </div>
+    <button class="btn" style="max-width:200px;margin:1.5rem auto 0;display:block;" onclick="closeDsgvo()">Schließen</button>
+  </div>
+</div>
+
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="footer">
   <img src="images/bni-logo-pure.png" alt="Unternehmer bei BNI®" style="height:40px;width:auto;margin-bottom:0.75rem;display:block;margin-left:auto;margin-right:auto;"><br>
@@ -638,7 +721,7 @@
 (function() {
   'use strict';
 
-  let registrations = [];
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6NIv3pcHKkPmVpK-vlvmj2jr9CF2q9S1BU629U85AgOba7YRz59dFpDoQMBQ3kEaBfA/exec';
 
   const params = new URLSearchParams(window.location.search);
   const isAdmin = params.get('admin') === 'true';
@@ -646,27 +729,42 @@
   if (isAdmin) {
     document.getElementById('registrationView').style.display = 'none';
     document.getElementById('adminView').style.display = 'block';
-    renderAdmin();
+    loadAdmin();
   }
 
+  // ── FORM SUBMIT ──
   const form = document.getElementById('regForm');
-  form.addEventListener('submit', function(e) {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const entry = {
-      id: Date.now(),
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Wird gespeichert…';
+
+    const payload = {
       vorname: val('vorname'),
       nachname: val('nachname'),
       email: val('email'),
       handy: val('handy'),
-      firma: val('firma'),
-      datum: new Date().toLocaleString('de-DE')
+      firma: val('firma')
     };
 
-    registrations.push(entry);
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(payload)
+      });
+    } catch (err) {
+      // no-cors yields opaque response – data was sent
+    }
+
     form.reset();
     clearErrors();
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Verbindlich anmelden';
     showModal();
   });
 
@@ -692,14 +790,20 @@
       }
     });
 
+    if (!document.getElementById('dsgvo').checked) {
+      document.getElementById('fg-dsgvo').classList.add('has-error');
+      valid = false;
+    }
+
     return valid;
   }
 
   function clearErrors() {
     document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
-    document.querySelectorAll('input').forEach(i => i.classList.remove('error'));
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]').forEach(i => i.classList.remove('error'));
   }
 
+  // ── SUCCESS MODAL ──
   function showModal() {
     document.getElementById('successModal').classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -708,83 +812,111 @@
     document.getElementById('successModal').classList.remove('active');
     document.body.style.overflow = '';
   };
-
   document.getElementById('successModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
 
-  function renderAdmin() {
+  // ── DATENSCHUTZ MODAL ──
+  window.openDsgvo = function(e) {
+    e.preventDefault();
+    document.getElementById('dsgvoModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeDsgvo = function() {
+    document.getElementById('dsgvoModal').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+  document.getElementById('dsgvoModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDsgvo();
+  });
+
+  // ── ADMIN ──
+  window.loadAdmin = async function() {
     const tbody = document.getElementById('adminTable');
     const empty = document.getElementById('emptyState');
     const countEl = document.getElementById('adminCount');
     const firmenEl = document.getElementById('adminFirmen');
 
-    tbody.innerHTML = '';
-    countEl.textContent = registrations.length;
-
-    const uniqueFirmen = new Set(registrations.map(r => r.firma.toLowerCase()));
-    firmenEl.textContent = uniqueFirmen.size;
-
-    if (registrations.length === 0) {
-      empty.style.display = 'block';
-      return;
-    }
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#64666A;">Laden…</td></tr>';
     empty.style.display = 'none';
 
-    registrations.forEach((r, i) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-        '<td>' + (i + 1) + '</td>' +
-        '<td>' + esc(r.vorname) + '</td>' +
-        '<td>' + esc(r.nachname) + '</td>' +
-        '<td>' + esc(r.email) + '</td>' +
-        '<td>' + esc(r.handy) + '</td>' +
-        '<td>' + esc(r.firma) + '</td>' +
-        '<td style="white-space:nowrap;font-size:0.8rem;color:#64666A;">' + esc(r.datum) + '</td>' +
-        '<td><button class="delete-btn" onclick="deleteEntry(' + r.id + ')" title="Löschen">' +
-        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>' +
-        '</button></td>';
-      tbody.appendChild(tr);
-    });
-  }
+    try {
+      const res = await fetch(APPS_SCRIPT_URL + '?action=read');
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || 'Unbekannter Fehler');
+
+      const data = json.data;
+      countEl.textContent = data.length;
+      const uniqueFirmen = new Set(data.map(r => (r.firma || '').toLowerCase()).filter(Boolean));
+      firmenEl.textContent = uniqueFirmen.size;
+
+      tbody.innerHTML = '';
+      if (data.length === 0) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      data.forEach((r, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + (i + 1) + '</td>' +
+          '<td>' + esc(r.vorname) + '</td>' +
+          '<td>' + esc(r.nachname) + '</td>' +
+          '<td>' + esc(r.email) + '</td>' +
+          '<td>' + esc(r.handy) + '</td>' +
+          '<td>' + esc(r.firma) + '</td>' +
+          '<td style="white-space:nowrap;font-size:0.8rem;color:#64666A;">' + esc(r.datum) + '</td>' +
+          '<td><button class="delete-btn" onclick="deleteEntry(' + r.rowNum + ')" title="Löschen">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>' +
+          '</button></td>';
+        tbody.appendChild(tr);
+      });
+    } catch(err) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#CF2030;">Fehler beim Laden: ' + esc(err.message) + '</td></tr>';
+    }
+  };
 
   function esc(str) {
     const d = document.createElement('div');
-    d.textContent = str;
+    d.textContent = String(str || '');
     return d.innerHTML;
   }
 
-  window.deleteEntry = function(id) {
+  window.deleteEntry = async function(rowNum) {
     if (!confirm('Anmeldung wirklich löschen?')) return;
-    registrations = registrations.filter(r => r.id !== id);
-    renderAdmin();
+    try {
+      await fetch(APPS_SCRIPT_URL + '?action=delete&row=' + rowNum);
+      loadAdmin();
+    } catch(err) {
+      alert('Fehler beim Löschen: ' + err.message);
+    }
   };
 
-  window.clearAll = function() {
+  window.clearAll = async function() {
     if (!confirm('Wirklich ALLE Anmeldungen löschen? Dies kann nicht rückgängig gemacht werden.')) return;
-    registrations = [];
-    renderAdmin();
+    try {
+      await fetch(APPS_SCRIPT_URL + '?action=clearAll');
+      loadAdmin();
+    } catch(err) {
+      alert('Fehler beim Löschen: ' + err.message);
+    }
   };
 
   window.exportCSV = function() {
-    if (registrations.length === 0) {
+    const rows = Array.from(document.querySelectorAll('#adminTable tr'));
+    if (rows.length === 0 || rows[0].querySelector('td[colspan]')) {
       alert('Keine Anmeldungen zum Exportieren vorhanden.');
       return;
     }
 
     const BOM = '\uFEFF';
     const header = 'Nr;Vorname;Nachname;E-Mail;Handynummer;Firma;Anmeldedatum\n';
-    const rows = registrations.map((r, i) =>
-      (i + 1) + ';' +
-      csvSafe(r.vorname) + ';' +
-      csvSafe(r.nachname) + ';' +
-      csvSafe(r.email) + ';' +
-      csvSafe(r.handy) + ';' +
-      csvSafe(r.firma) + ';' +
-      csvSafe(r.datum)
-    ).join('\n');
+    const csvRows = rows.map(tr => {
+      const cells = Array.from(tr.querySelectorAll('td')).slice(0, 7);
+      return cells.map(td => csvSafe(td.textContent.trim())).join(';');
+    }).join('\n');
 
-    const blob = new Blob([BOM + header + rows], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([BOM + header + csvRows], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
