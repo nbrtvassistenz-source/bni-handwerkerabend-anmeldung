@@ -216,25 +216,35 @@
     line-height: 1.4;
   }
 
-  /* ── COUNTER ── */
-  .counter {
-    text-align: center;
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background: var(--sterling-light);
-    border-radius: 12px;
+  /* ── PROGRAM ── */
+  .program { display: flex; flex-direction: column; gap: 1rem; }
+  .program-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
   }
-  .counter-number {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--bni-rot);
-  }
-  .counter-label {
-    font-size: 0.8rem;
-    color: var(--granite-grey);
-    font-weight: 600;
+  .program-tag {
+    flex-shrink: 0;
+    background: var(--bni-rot);
+    color: var(--true-white);
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding: 0.3rem 0.65rem;
+    border-radius: 50px;
+    margin-top: 0.1rem;
+  }
+  .program-content p {
+    font-size: 0.88rem;
+    color: var(--granite-grey);
+    margin-top: 0.2rem;
+    font-style: italic;
+  }
+  .program-company {
+    font-size: 0.85rem;
+    color: var(--granite-grey);
+    font-weight: 400;
   }
 
   /* ── MODAL ── */
@@ -490,11 +500,10 @@
 <!-- ══════════════ HEADER ══════════════ -->
 <header class="header">
   <!-- BNI Logo as inline SVG -->
-  <svg class="bni-logo" viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect width="300" height="120" rx="8" fill="rgba(255,255,255,0.15)"/>
-    <text x="150" y="82" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="80" fill="white" letter-spacing="4">BNI</text>
-    <text x="150" y="22" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="600" font-size="16" fill="white" opacity="0.9">Unternehmer bei</text>
-    <text x="278" y="90" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="14" fill="white" opacity="0.7">®</text>
+  <svg class="bni-logo" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="200" height="80" rx="8" fill="rgba(255,255,255,0.15)"/>
+    <text x="100" y="60" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="900" font-size="58" fill="white" letter-spacing="4">BNI</text>
+    <text x="185" y="64" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="13" fill="white" opacity="0.7">®</text>
   </svg>
 
   <h1>Handwerker<span>Abend</span></h1>
@@ -518,6 +527,33 @@
 
 <!-- ══════════════ REGISTRATION VIEW ══════════════ -->
 <main class="main" id="registrationView">
+  <div class="card" style="margin-bottom:1.5rem;">
+    <h2 class="card-title">Ablauf des Abends</h2>
+    <div class="program">
+      <div class="program-item">
+        <span class="program-tag">Trainingsloop</span>
+        <div class="program-content">
+          <strong>Guido Schmitz</strong>
+          <p>„Netzwerken für Handwerker"</p>
+        </div>
+      </div>
+      <div class="program-item">
+        <span class="program-tag">Präsentation</span>
+        <div class="program-content">
+          <strong>Nils de Graaf</strong> <span class="program-company">(nürburgring.tv)</span> &amp; <strong>Jacky Johann</strong> <span class="program-company">(Digital Sichtbar)</span>
+          <p>„Marketing und Social Media in der Baubranche"</p>
+        </div>
+      </div>
+      <div class="program-item">
+        <span class="program-tag">Präsentation</span>
+        <div class="program-content">
+          <strong>Nico Etten</strong> <span class="program-company">(IT Service Etten-Leur)</span> &amp; <strong>Sascha Johann</strong> <span class="program-company">(Württembergische Johann und Johann)</span>
+          <p>„IT-Sicherheit für Handwerker"</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card">
     <h2 class="card-title">Jetzt anmelden</h2>
 
@@ -559,10 +595,6 @@
     <p class="privacy-note">Mit der Anmeldung erklärst du dich einverstanden, dass deine Daten für die Veranstaltungsorganisation gespeichert werden.</p>
   </div>
 
-  <div class="counter">
-    <div class="counter-number" id="counterNum">0</div>
-    <div class="counter-label">Anmeldungen bisher</div>
-  </div>
 </main>
 
 <!-- ══════════════ ADMIN VIEW ══════════════ -->
@@ -657,8 +689,6 @@
     document.getElementById('registrationView').style.display = 'none';
     document.getElementById('adminView').style.display = 'block';
     renderAdmin();
-  } else {
-    updateCounter();
   }
 
   // ── FORM HANDLING ──
@@ -680,7 +710,6 @@
     registrations.push(entry);
     form.reset();
     clearErrors();
-    updateCounter();
     showModal();
   });
 
@@ -712,12 +741,6 @@
   function clearErrors() {
     document.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
     document.querySelectorAll('input').forEach(i => i.classList.remove('error'));
-  }
-
-  // ── COUNTER ──
-  function updateCounter() {
-    const el = document.getElementById('counterNum');
-    if (el) el.textContent = registrations.length;
   }
 
   // ── MODAL ──
